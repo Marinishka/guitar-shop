@@ -1,9 +1,12 @@
 import React from 'react';
-function App() {
-  return (
-    <div className="App">
+import Footer from '../footer/footer';
+import Header from './../header/header';
 
-    </div>
+function App() {
+  return (<>
+    <Header/>
+    <Footer/>
+  </>
   );
 }
 
