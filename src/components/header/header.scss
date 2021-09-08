@@ -1,0 +1,132 @@
+.header {
+  padding-bottom: 213px;
+  background: linear-gradient(to top, transparent,
+  transparent 115px, $color-bg-2 115px,
+  $color-bg-2 119px, transparent 119px,
+  transparent 129px, $color-bg-2 129px,
+  $color-bg-2 133px, transparent 133px,
+  transparent 143px, $color-bg-2 143px,
+  $color-bg-2 147px, transparent 147px,
+  transparent 157px, $color-bg-2 157px,
+  $color-bg-2 161px, transparent 161px,
+  transparent 171px, $color-bg-2 171px,
+  $color-bg-2 175px, transparent 175px,
+  transparent 185px, $color-bg-2 185px,
+  $color-bg-2 189px, transparent 189px);
+  position: relative;
+}
+
+.header__upper {
+  background-color: $color-bg-1;
+  padding-top: 20px;
+  padding-bottom: 16px;
+}
+
+.header__nav {
+  @extend .container;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-nav-list {
+  display: flex;
+  list-style: none;
+  padding: 25px 20px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.header-nav-list__item:not(:last-of-type) {
+  margin-right: 40px;
+}
+
+.header-nav-list__link {
+  text-decoration: none;
+  color: $color-text-main;
+  font-family: $font-family-regular;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.08em;
+}
+
+.header-nav-list__link:hover,
+.header-nav-list__link:focus {
+  color: $color-text-1;
+}
+
+.header-nav-list__link:active {
+  color: $color-text-1;
+  opacity: 0.5;
+}
+
+.header__logo-link:hover,
+.header__logo-link:focus {
+  opacity: 0.7;
+}
+
+.header__logo-link:active {
+  opacity: 0.5;
+}
+
+.header-user-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  margin-left: 32px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 6px;
+  flex-wrap: wrap;
+}
+
+.header-user-list__link {
+  padding-bottom: 3px;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  position: relative;
+}
+
+.header-user-list__link--contacts:hover path,
+.header-user-list__link--contacts:focus path {
+  stroke: $color-text-1;
+}
+
+.header-user-list__link--search:hover path,
+.header-user-list__link--search:focus path,
+.header-user-list__link--basket:hover path,
+.header-user-list__link--basket:focus path {
+  fill: $color-text-1;
+}
+
+.header-user-list__link:active path {
+  opacity: 0.5;
+}
+
+.header-user-list__icon {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-user-list__item:not(:last-of-type) {
+  margin-right: 9px;
+}
+
+.header-user-list__in-basket {
+  position: absolute;
+  font-size: 10px;
+  color: $color-text-index;
+  top: 9px;
+  right: 5px;
+}
+
+.header__down {
+  width: 100%;
+  height: 298px;
+  position: absolute;
+  background: url("./../../assets/img/guitar.png") no-repeat right bottom;
+  right: 0;
+  bottom: -47px;
+}

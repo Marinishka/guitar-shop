@@ -1,0 +1,194 @@
+.footer {
+  padding-top: 140px;
+  padding-bottom: 60px;
+  background: linear-gradient(transparent, transparent 63px, $color-bg-2 63px, $color-bg-2 69px, transparent 69px, transparent 79px, $color-bg-2 79px, $color-bg-2);
+  position: relative;
+  display: flex;
+  color: $color-text-btn;
+  font-family: $font-family-regular;
+
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  display: block;
+  background-image: url("./../../assets/img/guitar.png");
+  width: 825px;
+  height: 298px;
+  transform: rotate(180deg);
+  top: -10px;
+  left: -5px;
+  z-index: -1;
+}
+
+.footer__container {
+  @extend .container;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer__logo-link {
+  margin-bottom: 51px;
+  display: inline-block;
+}
+
+.footer__logo-link:hover,
+.footer__logo-link:focus {
+  opacity: 0.7;
+}
+
+.footer__logo-link:active {
+  opacity: 0.5;
+}
+
+.footer-social-list {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  opacity: 0.65;
+}
+
+.footer-social-list__item:not(:last-of-type) {
+  margin-right: 23px;
+}
+
+.footer-social-list__link:hover path,
+.footer-social-list__link:focus path {
+fill: $color-bg-btn-1;
+}
+
+.footer-social-list__link:active path {
+  opacity: 0.5;
+}
+
+.footer__column {
+  width: 145px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.footer__column--last {
+  padding-left: 5px;
+}
+
+.footer__column--last .footer__label {
+  margin-bottom: 10px;
+}
+
+.footer__column:not(.footer__column--first) {
+  padding-top: 21px;
+}
+
+.footer__column--first {
+  margin-right: 5px;
+}
+
+.footer__column-center .footer__column:not(:last-of-type) {
+  margin-right: 15px;
+}
+
+.footer__column-center {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.footer__item {
+  margin-left: 0;
+  font-size: 10px;
+  line-height: 12px;
+  word-wrap: break-word;
+  letter-spacing: 0.12em;
+}
+
+.footer__item:not(:last-of-type) {
+  margin-bottom: 8px;
+}
+
+.footer__text {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 12px;
+  letter-spacing: 0.03em;
+  font-size: 10px;
+  margin-left: 0;
+}
+
+.footer__text:not(:last-of-type) {
+  margin-bottom: 12px;
+}
+
+.footer__label {
+  opacity: 0.7;
+  margin-bottom: 14px;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: 0.15em;
+}
+
+.footer__address {
+  font-style: normal;
+  margin-bottom: 3px;
+  line-height: 12px;
+  word-wrap: break-word;
+  letter-spacing: 0.12em;
+}
+
+.footer__time {
+  font-style: normal;
+  margin-bottom: 3px;
+  line-height: 12px;
+  word-wrap: break-word;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+  margin-left: 0;
+}
+
+.footer__tel::before {
+  position: absolute;
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-image: url("./../../assets/img/icons/icon_phone.svg");
+  left: 0;
+  top: 0;
+}
+
+.footer__time-values {
+  padding-left: 13px;
+  position: relative;
+}
+
+.footer__time-values::before {
+  position: absolute;
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-image: url("./../../assets/img/icons/icon_clock.svg");
+  left: 0;
+  top: 0;
+}
+
+.footer__link {
+  text-decoration: none;
+  color: $color-text-btn;
+}
+
+.footer__link:hover,
+.footer__link:focus {
+  color: $color-bg-btn-1;
+}
+
+.footer__link:active {
+  opacity: 0.5;
+}
+
+.footer__tel {
+  @extend .footer__link;
+  padding-left: 14px;
+  letter-spacing: 0.1em;
+  position: relative;
+}
