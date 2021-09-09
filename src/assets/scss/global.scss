@@ -27,3 +27,13 @@ html {
   padding-left: 40px;
   padding-right: 40px;
 }
+
+.visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+
+  clip: rect(0 0 0 0);
+}
