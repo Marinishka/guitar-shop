@@ -5,10 +5,11 @@
 .catalog__main {
   display: flex;
   padding-bottom: 60px;
+  padding-top: 23px;
 }
 
 .catalog__title {
-font-size: 22px;
+  font-size: 22px;
 line-height: 1.2em;
 font-family: $font-family-bold;
 margin-top: 0;
@@ -21,7 +22,7 @@ letter-spacing: 0.03em;
   padding-left: 0;
   margin-top: 0;
   display: flex;
-  margin-bottom: 50px;
+  margin-bottom: 27px;
 }
 
 .bread-crumbs__item:not(:first-of-type) {
@@ -46,6 +47,8 @@ letter-spacing: 0.03em;
   color: $color-text-1;
   font-size: 16px;
   line-height: 1.2em;
+  font-family: $font-family-regular;
+  letter-spacing: 0.04em;
 }
 
 .bread-crumbs__link:hover,

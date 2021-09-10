@@ -10,7 +10,7 @@ function Catalog() {
 
   return <>
     <h2 className="catalog__title">Каталог гитар</h2>
-    <ul className="catalog__bread-crumbs bread-crumbs">
+    <ul className="bread-crumbs">
       <li className="bread-crumbs__item">
         <a className="bread-crumbs__link" href="#">Главная</a>
       </li>

@@ -1,4 +1,6 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import {Routes} from '../../const';
 
 function Footer() {
   return <footer className="footer">
@@ -45,19 +47,19 @@ function Footer() {
         <dl className="footer__column">
           <dt className="footer__label">Каталог</dt>
           <dd className="footer__item">
-            <a className="footer__link" href="#">Акустические гитары</a>
+            <Link className="footer__link" to={Routes.CATALOG}>Акустические гитары</Link>
           </dd>
           <dd className="footer__item">
-            <a className="footer__link" href="#">Классические гитары</a>
+            <Link className="footer__link" to={Routes.CATALOG}>Классические гитары</Link>
           </dd>
           <dd className="footer__item">
-            <a className="footer__link" href="#">Электрогитары</a>
+            <Link className="footer__link" to={Routes.CATALOG}>Электрогитары</Link>
           </dd>
           <dd className="footer__item">
-            <a className="footer__link" href="#">Бас-гитары</a>
+            <Link className="footer__link" to={Routes.CATALOG}>Бас-гитары</Link>
           </dd>
           <dd className="footer__item">
-            <a className="footer__link" href="#">Укулеле</a>
+            <Link className="footer__link" to={Routes.CATALOG}>Укулеле</Link>
           </dd>
         </dl>
         <dl className="footer__column">
