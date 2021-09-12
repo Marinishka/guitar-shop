@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Filter from '../filter/filter';
 import Sort from '../sort/sort';
 import data from '../../data';
 import {ORDERS_IN_LIST} from '../../const';
-import GoodsPagination from '../goods-pagination/goods-pagination';
+import Goods from '../goods/goods';
 
-function Catalog() {
+function Catalog({setPopupOpen}) {
   const amountPages = Math.ceil(data.length / ORDERS_IN_LIST);
 
   return <>
@@ -22,10 +23,14 @@ function Catalog() {
       <Filter/>
       <div className="catalog__goods">
         <Sort/>
-        <GoodsPagination amountPages={amountPages} data={data}/>
+        <Goods amountPages={amountPages} data={data} setPopupOpen={setPopupOpen}/>
       </div>
     </div>
   </>;
 }
+
+Catalog.propTypes = {
+  setPopupOpen: PropTypes.func.isRequired
+};
 
 export default Catalog;

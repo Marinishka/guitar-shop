@@ -1,0 +1,231 @@
+.overlay {
+  width: 100%;
+  // height: 100%;
+  height: 100vh;
+  // z-index: 1;
+  background-color: $color-bg-overlay;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.popup {
+  position: absolute;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  width: 740px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: $color-text-btn;
+  box-shadow: 0px 5px 6px rgba(63, 63, 63, 0.2);
+  left: 50%;
+  top: 50%;
+  padding: 28px 50px 26px;
+}
+
+.popup__close {
+  background-color: transparent;
+  position: absolute;
+  border: none;
+  right: 23px;
+  top: 23px;
+}
+
+.popup__close::before {
+  content: "";
+  display: block;
+position: absolute;
+width: 14.5px;
+height: 1px;
+background-color: $color-border-inputs;
+transform: rotate(45deg);
+}
+
+.popup__close::after {
+  content: "";
+  display: block;
+position: absolute;
+width: 14.5px;
+height: 1px;
+background-color: $color-border-inputs;
+transform: rotate(135deg);
+}
+
+.popup__close:hover::before,
+.popup__close:hover::after,
+.popup__close:focus::before,
+.popup__close:focus::after {
+  background-color: $color-text-1;
+}
+
+.popup__close:active::before,
+.popup__close:active::after {
+  opacity: 0.5;
+}
+
+.popup__text {
+  font-family: $font-family-bold;
+  font-size: 18px;
+  line-height: 1.2em;
+  color: $color-text-1;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.popup__item {
+  padding-top: 25px;
+  padding-bottom: 2px;
+  display: flex;
+}
+
+.popup__specifications {
+  padding-right: 20px;
+  padding-top: 9px;
+}
+
+.popup__img {
+  margin-right: 40px;
+}
+
+.popup__title {
+  font-family: $font-family-bold;
+  font-size: 16px;
+  line-height: 1.2em;
+  margin-bottom: 10px;
+  margin-top: 0;
+  color: $color-text-1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.popup__title--added {
+  letter-spacing: 0.12em;
+}
+
+.popup__characteristic {
+  font-family: $font-family-regular;
+  font-size: 14px;
+  line-height: 1.2em;
+  color: $color-text-main;
+  letter-spacing: 0.08em;
+}
+
+.popup__characteristic:not(:last-of-type) {
+  margin-bottom: 4px;
+}
+
+.popup__price {
+  padding-top: 11px;
+  font-family: $font-family-bold;
+  font-size: 20px;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+}
+
+.popup__add {
+  border: none;
+  border-radius: 2px;
+  background-color: $color-bg-btn-2;
+  font-family: $font-family-bold;
+  font-size: 16px;
+  line-height: 1.2em;
+  padding: 12px 20px 15px 17px;
+    letter-spacing: 0.07em;
+  color: $color-text-btn;
+  margin-left: auto;
+  margin-bottom: auto;
+  margin-top: 10px;
+}
+
+.popup__add:hover,
+.popup__add:focus {
+background-color: $color-bg-btn-2-hvr;
+}
+
+.popup__add:active {
+background-color: $color-bg-btn-2-active;
+}
+
+.popup__delete {
+  border: none;
+  border-radius: 2px;
+  background-color: $color-bg-btn-2;
+  font-family: $font-family-bold;
+  font-size: 16px;
+  line-height: 1.2em;
+  padding: 12px 20px 15px 17px;
+    letter-spacing: 0.07em;
+  color: $color-text-btn;
+  margin-left: auto;
+  margin-top: 0;
+  margin-bottom: 17px;
+  width: 220px;
+}
+
+.popup__delete:hover,
+.popup__delete:focus {
+background-color: $color-bg-btn-2-hvr;
+}
+
+.popup__delete:active {
+background-color: $color-bg-btn-2-active;
+}
+
+.popup__btns {
+  padding-top: 28px;
+  text-align: center;
+  padding-bottom: 27px;
+}
+
+.popup__btns-delete {
+  width: 220px;
+  margin-left: auto;
+padding-top: 10px;
+}
+
+.popup__link {
+  text-decoration: none;
+  color: $color-text-btn;
+  border-radius: 2px;
+  background-color: $color-bg-btn-2;
+  padding: 13px 5px;
+  width: 220px;
+  font-family: $font-family-bold;
+  font-size: 16px;
+  line-height: 1.2em;
+  margin-right: 37px;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 0.06em;
+}
+
+.popup__link:hover,
+.popup__link:focus {
+  background-color: $color-bg-btn-2-hvr;
+}
+
+.popup__link:active {
+  background-color: $color-bg-btn-2-active;
+}
+
+.popup__btn-close {
+  border: 1px solid $color-text-2;
+  border-radius: 2px;
+  background-color: transparent;
+  font-family: $font-family-bold;
+  font-size: 16px;
+  line-height: 1.2em;
+  padding: 12px 5px;
+  width: 220px;
+  letter-spacing: 0.08em;
+}
+
+.popup__btn-close:hover,
+.popup__btn-close:focus {
+  opacity: 0.7;
+}
+
+.popup__btn-close:active {
+  border-color: $color-btn-direction;
+  opacity: 0.5;
+}
