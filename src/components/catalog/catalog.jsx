@@ -2,12 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Filter from '../filter/filter';
 import Sort from '../sort/sort';
-import data from '../../data';
-import {ORDERS_IN_LIST} from '../../const';
 import Goods from '../goods/goods';
 
 function Catalog({setPopupOpen}) {
-  const amountPages = Math.ceil(data.length / ORDERS_IN_LIST);
 
   return <>
     <h2 className="catalog__title">Каталог гитар</h2>
@@ -23,7 +20,7 @@ function Catalog({setPopupOpen}) {
       <Filter/>
       <div className="catalog__goods">
         <Sort/>
-        <Goods amountPages={amountPages} data={data} setPopupOpen={setPopupOpen}/>
+        <Goods setPopupOpen={setPopupOpen}/>
       </div>
     </div>
   </>;

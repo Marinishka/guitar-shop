@@ -1,5 +1,10 @@
 .basket {
   padding-bottom: 92px;
+  font-size: 16px;
+  line-height: 1.2em;
+  color: $color-text-main;
+
+font-family: $font-family-regular;
 }
 
 .basket__list {
@@ -210,6 +215,7 @@ transform: rotate(135deg);
 
 .basket__column {
   display: inline-block;
+  position: relative;
 }
 
 .basket__column--right {
@@ -288,4 +294,14 @@ transform: rotate(135deg);
 
 .basket__submit:active {
   background-color: $color-bg-btn-2-active;
+}
+
+.basket__error-promo-code {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  font-family: $font-family-bold;
+  font-size: 10px;
+  line-height: 1.2em;
+  color: $color-text-index;
 }
