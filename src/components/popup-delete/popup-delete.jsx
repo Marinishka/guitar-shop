@@ -1,11 +1,16 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
-
 import {getNumberWithSpaces} from './../../utils/common';
+import {deleteModelGuitar} from '../../store/action';
 
 function PopupDelete({closePopup, item}) {
+
+  const dispatch = useDispatch();
+
   const onDeleteClick = (evt) => {
     evt.preventDefault();
+    dispatch(deleteModelGuitar(item.art));
     closePopup();
   };
 
@@ -13,8 +18,6 @@ function PopupDelete({closePopup, item}) {
     evt.preventDefault();
     closePopup();
   };
-  // eslint-disable-next-line
-  console.log(item)
 
   return <div className="popup__inner">
     <p className="popup__text">Удалить этот товар? </p>

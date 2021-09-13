@@ -41,13 +41,17 @@
   margin-right: 40px;
 }
 
-.header-nav-list__link {
+.header-nav-list__item {
   text-decoration: none;
   color: $color-text-main;
   font-family: $font-family-regular;
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0.08em;
+}
+
+.header-nav-list__link {
+@extend .header-nav-list__item;
 }
 
 .header-nav-list__link:hover,
@@ -80,13 +84,17 @@
   flex-wrap: wrap;
 }
 
-.header-user-list__link {
+.header-user-list__like-link {
   padding-bottom: 3px;
   display: flex;
   width: 40px;
   height: 40px;
   align-items: center;
   position: relative;
+}
+
+.header-user-list__link {
+  @extend .header-user-list__like-link
 }
 
 .header-user-list__link--contacts:hover path,

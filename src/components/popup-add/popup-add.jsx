@@ -1,12 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {useDispatch} from 'react-redux';
 import {getCapitalizedWord, getNumberWithSpaces} from './../../utils/common';
+import {addGuitar} from '../../store/action';
 
 function PopupAdd({item, setPopupOpen}) {
+
+  const dispatch = useDispatch();
 
   const onAddClick = (evt) => {
     evt.preventDefault();
     setPopupOpen([`added-item`, null]);
+    dispatch(addGuitar(item.art));
   };
 
   return <div className="popup__inner">

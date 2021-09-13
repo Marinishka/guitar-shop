@@ -19,7 +19,7 @@ function App() {
           return <Catalog setPopupOpen={setPopupOpen}/>;
         }}/>
         <Route path={Routes.BASKET} exact render={() => {
-          return <Basket/>;
+          return <Basket setPopupOpen={setPopupOpen}/>;
         }}/>
       </Switch>
     </main>

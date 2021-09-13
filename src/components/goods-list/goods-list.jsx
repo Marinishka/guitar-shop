@@ -16,10 +16,12 @@ function GoodsList({activePage, data, setPopupOpen}) {
 
   const getGoodList = () => {
     return orderList.map((item) => {
+
       const onBuyClick = (evt) => {
         evt.preventDefault();
         setPopupOpen([`add-item`, item]);
       };
+
       return <li className="goods-list__item" key={item.art}>
         <article className="good">
           <img className="good__img" src="./img/acoustic.png" width="68" height="190" alt={`${item.type} ${item.name}`}></img>
