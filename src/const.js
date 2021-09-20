@@ -18,3 +18,15 @@ export const PromoCodeErrors = {
   'no-promo-code': `Нет такого промо кода`,
   'amount-below-30-percent': `Для этого промокода сумма вашей покупки должна быть выше 10 000 рублей`
 };
+
+export const GuitarTypes = {
+  'акустическая гитара': [`acoustic`, `Акустические гитары`],
+  'электрогитара': [`electric-guitar`, `Элекрогитары`],
+  'укулеле': [`ukulele`, `Укулеле`]
+};
+
+export const TypesEithStrings = {
+  'акустическая гитара': [6, 7, 12],
+  'электрогитара': [4, 6, 7],
+  'укулеле': [4]
+};

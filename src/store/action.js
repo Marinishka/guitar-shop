@@ -4,7 +4,8 @@ export const ActionType = {
   FETCH_GUITARS: `data/fetchGuitars`,
   ADD_GUITAR: `local/addGuitar`,
   DELETE_ONE_GUITAR: `local/deleteOneGuitar`,
-  DELETE_MODEL_GUITAR: `local/deleteMoledGuitar`
+  DELETE_MODEL_GUITAR: `local/deleteMoledGuitar`,
+  CHANGE_FILTERED_GUTARS: `local/changeFilteredGuitars`
 };
 
 export const fetchGuitars = createAction(ActionType.FETCH_GUITARS, (data) => {
@@ -28,5 +29,11 @@ export const deleteOneGuitar = createAction(ActionType.DELETE_ONE_GUITAR, (guita
 export const deleteModelGuitar = createAction(ActionType.DELETE_MODEL_GUITAR, (guitar) => {
   return {
     payload: guitar
+  };
+});
+
+export const changeFilteredGuitars = createAction(ActionType.CHANGE_FILTERED_GUTARS, (guitars) => {
+  return {
+    payload: guitars
   };
 });

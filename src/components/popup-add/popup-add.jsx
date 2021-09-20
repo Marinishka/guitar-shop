@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import {getCapitalizedWord, getNumberWithSpaces} from './../../utils/common';
 import {addGuitar} from '../../store/action';
+import {GuitarTypes} from '../../const';
 
 function PopupAdd({item, setPopupOpen}) {
 
@@ -18,7 +19,7 @@ function PopupAdd({item, setPopupOpen}) {
     <p className="popup__text">Добавить товар в корзину</p>
     <section className="popup__item">
       <img className="popup__img"
-        src='./img/electro-1-mini.png'
+        src={`./img/${GuitarTypes[item.type][0]}-mini.png`}
         width="56"
         height="128"
         alt={`${item.strings} струнная ${item.type} ${item.name}`}></img>

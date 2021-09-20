@@ -1,8 +1,9 @@
-import {addGuitar, deleteOneGuitar, deleteModelGuitar} from '../action';
+import {addGuitar, deleteOneGuitar, deleteModelGuitar, changeFilteredGuitars} from '../action';
 import {createReducer} from '@reduxjs/toolkit';
 
 const initialState = {
-  guitarsInBasket: []
+  guitarsInBasket: [],
+  filteredGuitars: []
 };
 
 const localState = createReducer(initialState, (builder) => {
@@ -28,6 +29,9 @@ const localState = createReducer(initialState, (builder) => {
   });
   builder.addCase(deleteModelGuitar, (state, action) => {
     state.guitarsInBasket.splice(state.guitarsInBasket.indexOf(state.guitarsInBasket.find((item) => item.art === action.payload)), 1);
+  });
+  builder.addCase(changeFilteredGuitars, (state, action) => {
+    state.filteredGuitars = action.payload;
   });
 });
 

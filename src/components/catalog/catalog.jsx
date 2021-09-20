@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Filter from '../filter/filter';
-import Sort from '../sort/sort';
 import Goods from '../goods/goods';
 
 function Catalog({setPopupOpen}) {
-
   return <>
     <h2 className="catalog__title">Каталог гитар</h2>
     <ul className="bread-crumbs">
@@ -18,10 +16,7 @@ function Catalog({setPopupOpen}) {
     </ul>
     <div className="catalog__main">
       <Filter/>
-      <div className="catalog__goods">
-        <Sort/>
-        <Goods setPopupOpen={setPopupOpen}/>
-      </div>
+      <Goods setPopupOpen={setPopupOpen}/>
     </div>
   </>;
 }
