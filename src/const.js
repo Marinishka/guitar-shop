@@ -30,3 +30,8 @@ export const TypesEithStrings = {
   'электрогитара': [4, 6, 7],
   'укулеле': [4]
 };
+
+export const KeyCode = {
+  ESCAPE: 27,
+  ENTER: 13
+};
