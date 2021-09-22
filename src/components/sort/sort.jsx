@@ -29,23 +29,27 @@ function Sort() {
 
   const onSortParameterClick = (evt) => {
     evt.preventDefault();
-    setSortParameter(evt.target.dataset.parameter);
-    if (sortingDirection === `initial`) {
-      setSortingDirection(`to-largest`);
-      dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[`to-largest`](evt.target.dataset.parameter))));
-    } else {
-      dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[sortingDirection](evt.target.dataset.parameter))));
+    if (evt.target.classList.contains(`sort__btn-type`)) {
+      setSortParameter(evt.target.dataset.parameter);
+      if (sortingDirection === `initial`) {
+        setSortingDirection(`to-largest`);
+        dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[`to-largest`](evt.target.dataset.parameter))));
+      } else {
+        dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[sortingDirection](evt.target.dataset.parameter))));
+      }
     }
   };
 
   const onSortDirectionClick = (evt) => {
     evt.preventDefault();
-    setSortingDirection(evt.target.dataset.direction);
-    if (sortParameter === `initial`) {
-      setSortParameter(`price`);
-      dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[evt.target.dataset.direction](`price`))));
-    } else {
-      dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[evt.target.dataset.direction](sortParameter))));
+    if (evt.target.classList.contains(`sort__btn-direction`)) {
+      setSortingDirection(evt.target.dataset.direction);
+      if (sortParameter === `initial`) {
+        setSortParameter(`price`);
+        dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[evt.target.dataset.direction](`price`))));
+      } else {
+        dispatch(changeFilteredGuitars(GettersAssortedGuitars[`sorting`](filteredGuitars, SortingFunctions[evt.target.dataset.direction](sortParameter))));
+      }
     }
   };
 
