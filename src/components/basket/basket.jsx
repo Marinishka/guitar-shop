@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import {Routes} from '../../const';
 import BasketForm from '../basket-form/basket-form';
 
-function Basket({setPopupOpen}) {
+function Basket({onSetPopupOpen}) {
   const guitarsInBasket = useSelector((state) => state.LOCAL.guitarsInBasket);
 
   const getBasketForm = () => {
     if (guitarsInBasket.length === 0) {
       return <div className="basket">Ваша корзина пуста. Добавьте сюда что-нибудь из нашего <Link className="bread-crumbs__link" to={Routes.CATALOG}>каталога</Link>.</div>;
     } else {
-      return <BasketForm setPopupOpen={setPopupOpen}/>;
+      return <BasketForm onSetPopupOpen={onSetPopupOpen}/>;
     }
   };
 
@@ -34,7 +34,7 @@ function Basket({setPopupOpen}) {
 }
 
 Basket.propTypes = {
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default Basket;

@@ -8,7 +8,7 @@ import data from '../../data';
 import {ORDERS_IN_LIST} from '../../const';
 import {fetchGuitars} from '../../store/action';
 
-function Goods({setPopupOpen}) {
+function Goods({onSetPopupOpen}) {
   const [activePage, setActivePage] = useState(1);
   const [amountPages, setAmountPages] = useState(0);
 
@@ -27,13 +27,13 @@ function Goods({setPopupOpen}) {
 
   return <div className="catalog__goods">
     <Sort/>
-    <GoodsList activePage={activePage} setPopupOpen={setPopupOpen}/>
-    {amountPages > 1 ? <Pagination amountPages={amountPages} activePage={activePage} setActivePage={setActivePage}/> : ``}
+    <GoodsList activePage={activePage} onSetPopupOpen={onSetPopupOpen}/>
+    {amountPages > 1 ? <Pagination amountPages={amountPages} activePage={activePage} onSetActivePage={setActivePage}/> : ``}
   </div>;
 }
 
 Goods.propTypes = {
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default Goods;

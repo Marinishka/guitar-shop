@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {CheckingEnteredValues, FilterModifiers, GuitarTypes, IsGuitarOptionsAvailable, KeyCode} from '../../const';
 import {changeFilteredGuitars} from '../../store/action';
-import {getNumberWithSpaces, sortFunctionToLargest} from '../../utils/common';
+import {numberFormatter, sortFunctionToLargest} from '../../utils/common';
 
 function Filter() {
   const dispatch = useDispatch();
@@ -94,15 +94,15 @@ function Filter() {
       maxPrice.current.min = newActiveCheckedValues.MIN;
       minPrice.current.min = availableFilters.price.MIN;
       maxPrice.current.max = availableFilters.price.MAX;
-      minPrice.current.placeholder = getNumberWithSpaces(availableFilters.price.MIN);
-      maxPrice.current.placeholder = getNumberWithSpaces(availableFilters.price.MAX);
+      minPrice.current.placeholder = numberFormatter.format(availableFilters.price.MIN);
+      maxPrice.current.placeholder = numberFormatter.format(availableFilters.price.MAX);
     } else {
       minPrice.current.max = newAvailableFilters.price.MAX;
       maxPrice.current.min = newAvailableFilters.price.MIN;
       minPrice.current.min = newAvailableFilters.price.MIN;
       maxPrice.current.max = newAvailableFilters.price.MAX;
-      minPrice.current.placeholder = getNumberWithSpaces(newAvailableFilters.price.MIN);
-      maxPrice.current.placeholder = getNumberWithSpaces(newAvailableFilters.price.MAX);
+      minPrice.current.placeholder = numberFormatter.format(newAvailableFilters.price.MIN);
+      maxPrice.current.placeholder = numberFormatter.format(newAvailableFilters.price.MAX);
     }
     dispatch(changeFilteredGuitars(newGuitarList));
   };
@@ -234,8 +234,8 @@ function Filter() {
     maxPrice.current.min = newFilters.price.MIN;
     minPrice.current.min = newFilters.price.MIN;
     maxPrice.current.max = newFilters.price.MAX;
-    minPrice.current.placeholder = getNumberWithSpaces(newFilters.price.MIN);
-    maxPrice.current.placeholder = getNumberWithSpaces(newFilters.price.MAX);
+    minPrice.current.placeholder = numberFormatter.format(newFilters.price.MIN);
+    maxPrice.current.placeholder = numberFormatter.format(newFilters.price.MAX);
     return newFilters;
   };
 
