@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {GuitarTypes, KeyCode} from '../../const';
+import {CheckingEnteredValues, FilterModifiers, GuitarTypes, IsGuitarOptionsAvailable, KeyCode} from '../../const';
 import {changeFilteredGuitars} from '../../store/action';
 import {getNumberWithSpaces, sortFunctionToLargest} from '../../utils/common';
 
@@ -23,26 +23,6 @@ function Filter() {
 
   const minPrice = useRef();
   const maxPrice = useRef();
-
-  const Filters = new Map([
-    [`type`, function (guitar, activeValues) {
-      if (activeValues.length > 0) {
-        return activeValues.includes(guitar.type);
-      } else {
-        return true;
-      }
-    }],
-    [`strings`, function (guitar, activeValues) {
-      if (activeValues.length > 0) {
-        return activeValues.includes(String(guitar.strings));
-      } else {
-        return true;
-      }
-    }],
-    [`price`, function (guitar, activeValuesPrices) {
-      return guitar.price >= activeValuesPrices.MIN && guitar.price <= activeValuesPrices.MAX;
-    }]
-  ]);
 
   const ActiveValues = {
     'type': activeTypes,
@@ -84,7 +64,7 @@ function Filter() {
     return newActiveValues;
   };
 
-  const changeParameter = (filterType, newValue, activeValues, setNewValues) => {
+  const onParameterChange = (filterType, newValue, activeValues, setNewValues) => {
     const newActiveCheckedValues = getNewActiveValues(activeValues, newValue);
     setNewValues(newActiveCheckedValues);
     const NewActiveValues = {
@@ -97,21 +77,17 @@ function Filter() {
     } else {
       NewActiveValues[filterType] = newActiveCheckedValues;
     }
-    let guitarOptions = {
-      'type': new Set(),
-      'strings': new Set()
-    };
     const newGuitarList = guitars.filter((guitar) => {
       let arrayOfFilterResults = [];
-      for (let filter of Filters) {
-        arrayOfFilterResults.push(filter[1](guitar, NewActiveValues[filter[0]]));
+      for (let guitarOption of IsGuitarOptionsAvailable) {
+        arrayOfFilterResults.push(guitarOption[1](guitar, NewActiveValues[guitarOption[0]]));
       }
       const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
         return lastValue && prevValue;
       });
       return result;
     });
-    const newAvailableFilters = getAvailableFilters2(newGuitarList, filterType, guitarOptions, NewActiveValues);
+    const newAvailableFilters = getAvailableFilters(filterType, NewActiveValues);
     setAvailableFilters(newAvailableFilters);
     if (filterType === `price`) {
       minPrice.current.max = newActiveCheckedValues.MAX;
@@ -131,236 +107,106 @@ function Filter() {
     dispatch(changeFilteredGuitars(newGuitarList));
   };
 
-  const AdjustmentsCheckedValues = {
-    'type': function (checkedValues, availableValues) {
-      checkedValues.forEach((value) => {
-        if (!availableValues.has(value)) {
-          checkedValues.delete(value);
+  const modificateAvailableFilters = (newActiveValues, unchangeableOption, guitarOptions, newFilters, isPricesChange = false) => {
+    guitars.filter((guitar) => {
+      let arrayOfFilterResults = [];
+      let result;
+      if (unchangeableOption === null) {
+        arrayOfFilterResults.push(IsGuitarOptionsAvailable.get(`price`)(guitar, newActiveValues[`price`]));
+        result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
+          return lastValue && prevValue;
+        });
+        for (let guitarOption in guitarOptions) {
+          if (Object.prototype.hasOwnProperty.call(guitarOptions, guitarOption)) {
+            if (result) {
+              guitarOptions[guitarOption].add(guitar[guitarOption]);
+            }
+          }
         }
-      });
-    },
-    'strings': function (checkedValues, availableValues) {
-      checkedValues.forEach((value) => {
-        if (!availableValues.has(Number(value))) {
-          checkedValues.delete(value);
+      } else {
+        let isGuitarPriceAvailable;
+        for (let guitarOption of IsGuitarOptionsAvailable) {
+          if (guitarOption[0] === unchangeableOption) {
+            const isGuitarOptionAvailable = IsGuitarOptionsAvailable.get(guitarOption[0])(guitar, newActiveValues[guitarOption[0]]);
+            arrayOfFilterResults.push(isGuitarOptionAvailable);
+            if (isPricesChange && isGuitarOptionAvailable) {
+              if (newFilters.price.MIN >= guitar.price) {
+                newFilters.price.MIN = guitar.price;
+              }
+              if (newFilters.price.MAX <= guitar.price) {
+                newFilters.price.MAX = guitar.price;
+              }
+            }
+          } else if (guitarOption[0] === `price`) {
+            isGuitarPriceAvailable = IsGuitarOptionsAvailable.get(guitarOption[0])(guitar, newActiveValues[guitarOption[0]]);
+            arrayOfFilterResults.push(isGuitarPriceAvailable);
+          }
         }
-      });
-    },
-    'price': function () {
+        if (isGuitarPriceAvailable) {
+          guitarOptions[unchangeableOption].add(guitar[unchangeableOption]);
+        }
+        result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
+          return lastValue && prevValue;
+        });
+        for (let guitarOption in guitarOptions) {
+          if (guitarOption !== unchangeableOption && result) {
+            guitarOptions[guitarOption].add(guitar[guitarOption]);
+          }
+        }
+      }
+      return result;
+    });
+    for (let filter in newFilters) {
+      if (filter !== `price` && filter !== unchangeableOption) {
+        newFilters[filter] = guitarOptions[filter];
+      }
     }
   };
 
-  const getAvailableFilters2 = (guitarList, checkedFilter, guitarOptions, newActiveValues) => {
+  const getAvailableFilters = (checkedFilter, newActiveValues) => {
+    const guitarOptions = {
+      'type': new Set(),
+      'strings': new Set()
+    };
     const newFilters = availableFilters;
-    if (checkedFilter === `strings`) {
+    if (checkedFilter !== `price`) {
       newFilters.price.MIN = Infinity;
       newFilters.price.MAX = -Infinity;
-      const newGuitarsByPrice = guitars.filter((guitar) => {
-        let result;
-        let pricesForFilter;
-        pricesForFilter = newActiveValues.price;
-        result = Filters.get(`price`)(guitar, pricesForFilter);
-        guitarOptions.strings.add(guitar.strings);
-        return result;
-      });
-      if (newActiveValues.strings.length === 0 && newActiveValues.type.length === 0) {
+      if (newActiveValues.type.length === 0 && newActiveValues.strings.length === 0) {
+        modificateAvailableFilters(newActiveValues, null, guitarOptions, newFilters);
         newFilters.price.MIN = filters.price.MIN;
         newFilters.price.MAX = filters.price.MAX;
-      }
-      if (newActiveValues.strings.length === 0) {
-        if (newActiveValues.type.length === 0) {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              if (filter[0] !== `strings` && filter[0] !== `type`) {
-                arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-              }
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        } else {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              if (filter[0] !== `strings` && filter[0] !== `type`) {
-                arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-              }
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        }
+      } else if (newActiveValues.type.length > 0 && newActiveValues.strings.length > 0) {
+        modificateAvailableFilters(newActiveValues, checkedFilter, guitarOptions, newFilters, true);
+      } else if (newActiveValues.strings.length > 0) {
+        modificateAvailableFilters(newActiveValues, checkedFilter, guitarOptions, newFilters, true);
       } else {
-        if (newActiveValues.type.length === 0) {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              if (filter[0] !== `type`) {
-                arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-              }
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        } else {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        }
+        modificateAvailableFilters(newActiveValues, `type`, guitarOptions, newFilters, true);
       }
-      newFilters.type = guitarOptions.type;
-      guitarList.forEach((guitar) => {
-        if (newFilters.price.MIN >= guitar.price) {
-          newFilters.price.MIN = guitar.price;
-        }
-        if (newFilters.price.MAX <= guitar.price) {
-          newFilters.price.MAX = guitar.price;
-        }
-      });
-    } else if (checkedFilter === `type`) {
-      newFilters.price.MIN = Infinity;
-      newFilters.price.MAX = -Infinity;
-      const newGuitarsByPrice = guitars.filter((guitar) => {
-        let result;
-        let pricesForFilter;
-        pricesForFilter = newActiveValues.price;
-        result = Filters.get(`price`)(guitar, pricesForFilter);
-        guitarOptions.type.add(guitar.type);
-        return result;
-      });
-      if (newActiveValues.strings.length === 0 && newActiveValues.type.length === 0) {
-        newFilters.price.MIN = filters.price.MIN;
-        newFilters.price.MAX = filters.price.MAX;
-      }
-      if (newActiveValues.type.length === 0) {
-        if (newActiveValues.strings.length === 0) {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              if (filter[0] !== `strings` && filter[0] !== `type`) {
-                arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-              }
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        } else {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              if (filter[0] !== `strings`) {
-                arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-              }
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        }
-      } else {
-        if (newActiveValues.strings.length === 0) {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              if (filter[0] !== `strings`) {
-                arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-              }
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        } else {
-          newGuitarsByPrice.filter((guitar) => {
-            let arrayOfFilterResults = [];
-            for (let filter of Filters) {
-              arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
-            }
-            const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
-              return lastValue && prevValue;
-            });
-            if (result) {
-              guitarOptions.type.add(guitar.type);
-              guitarOptions.strings.add(guitar.strings);
-            }
-            return result;
-          });
-        }
-      }
-      newFilters.strings = guitarOptions.strings;
-      guitarList.forEach((guitar) => {
-        if (newFilters.price.MIN >= guitar.price) {
-          newFilters.price.MIN = guitar.price;
-        }
-        if (newFilters.price.MAX <= guitar.price) {
-          newFilters.price.MAX = guitar.price;
-        }
-      });
     } else {
+      let filtersForModifiredPrice = new Map();
+      for (let guitarOption of IsGuitarOptionsAvailable) {
+        if (newActiveValues[guitarOption[0]].length > 0 || guitarOption[0] === `price`) {
+          filtersForModifiredPrice.set(guitarOption[0], guitarOption[1]);
+        }
+      }
       guitars.filter((guitar) => {
         let arrayOfFilterResults = [];
-        for (let filter of Filters) {
-          if (newActiveValues[filter[0]].length > 0 || filter[0] === `price`) {
-            arrayOfFilterResults.push(filter[1](guitar, newActiveValues[filter[0]]));
+        for (let filter of filtersForModifiredPrice) {
+          const isGuitarOptionAvailable = filter[1](guitar, newActiveValues[filter[0]]);
+          arrayOfFilterResults.push(isGuitarOptionAvailable);
+          if (filter[0] === `price` && isGuitarOptionAvailable) {
+            guitarOptions.type.add(guitar.type);
+            guitarOptions.strings.add(guitar.strings);
           }
         }
         const result = arrayOfFilterResults.reduce(function (lastValue, prevValue) {
           return lastValue && prevValue;
         });
-        if (result) {
-          guitarOptions.type.add(guitar.type);
-          guitarOptions.strings.add(guitar.strings);
-        }
-        newFilters.strings = guitarOptions.strings;
-        newFilters.type = guitarOptions.type;
         return result;
       });
+      newFilters.strings = guitarOptions.strings;
+      newFilters.type = guitarOptions.type;
       if (newActiveValues.strings.length === 0 && newActiveValues.type.length === 0) {
         newFilters.price.MIN = filters.price.MIN;
         newFilters.price.MAX = filters.price.MAX;
@@ -368,57 +214,13 @@ function Filter() {
         newFilters.price = availableFilters.price;
       }
     }
-    const filtersPipe = Object.keys(filters);
-    filtersPipe.forEach((filter) => {
-      AdjustmentsCheckedValues[filter](ActiveValues[filter], newFilters[filter]);
-    });
+    for (let checkedValue of CheckingEnteredValues) {
+      CheckingEnteredValues.get(checkedValue[0])(ActiveValues[checkedValue[0]], newFilters[checkedValue[0]]);
+    }
     return newFilters;
   };
 
-  const getUpdateNewFilters = (guitarList, newFilters, pipeFunctions, checkedFilterType, newActiveCheckedValues) => {
-    if (typeof checkedFilterType === `undefined`) {
-      const filtersPipe = Object.keys(filters);
-      guitarList.forEach((guitar) => {
-        filtersPipe.forEach((filter) => {
-          pipeFunctions[filter](guitar);
-        });
-      });
-      minPrice.current.max = newFilters.price.MAX;
-      maxPrice.current.min = newFilters.price.MIN;
-      minPrice.current.min = newFilters.price.MIN;
-      maxPrice.current.max = newFilters.price.MAX;
-      minPrice.current.placeholder = getNumberWithSpaces(newFilters.price.MIN);
-      maxPrice.current.placeholder = getNumberWithSpaces(newFilters.price.MAX);
-    } else {
-      const filtersPipe = [`type`, `strings`, `price`];
-      if (newActiveCheckedValues.size === 0) {
-
-        guitarList.forEach((guitar) => {
-          pipeFunctions[checkedFilterType](guitar);
-        });
-        filtersPipe.forEach((filter) => {
-          if (ActiveValues[filter].size > 0) {
-            guitarList.forEach((guitar) => {
-              pipeFunctions[filter](guitar);
-            });
-          } else {
-            guitarList.forEach((guitar) => {
-              pipeFunctions[filter](guitar);
-            });
-          }
-        });
-      } else {
-        guitarList.forEach((guitar) => {
-          filtersPipe.forEach((filter) => {
-            pipeFunctions[filter](guitar);
-          });
-        });
-        newFilters[checkedFilterType] = availableFilters[checkedFilterType];
-      }
-    }
-  };
-
-  const getAvailableFilters = (guitarList, newActiveFilters, newActiveCheckedValues) => {
+  const getFilters = (guitarList) => {
     const newFilters = {
       'type': new Set(),
       'strings': new Set(),
@@ -427,30 +229,18 @@ function Filter() {
         MAX: 0
       }
     };
-    const PipeFunctions = {
-      'type': function (guitar) {
-        newFilters.type.add(guitar.type);
-      },
-      'strings': function (guitar) {
-        newFilters.strings.add(guitar.strings);
-      },
-      'price': function (guitar) {
-        if (newFilters.price.MIN >= guitar.price) {
-          newFilters.price.MIN = guitar.price;
-        }
-        if (newFilters.price.MAX <= guitar.price) {
-          newFilters.price.MAX = guitar.price;
-        }
+    guitarList.forEach((guitar) => {
+      for (let filter of FilterModifiers) {
+        FilterModifiers.get(filter[0])(guitar, newFilters);
       }
-    };
-    getUpdateNewFilters(guitarList, newFilters, PipeFunctions, newActiveFilters, newActiveCheckedValues);
+    });
+    minPrice.current.max = newFilters.price.MAX;
+    maxPrice.current.min = newFilters.price.MIN;
+    minPrice.current.min = newFilters.price.MIN;
+    maxPrice.current.max = newFilters.price.MAX;
+    minPrice.current.placeholder = getNumberWithSpaces(newFilters.price.MIN);
+    maxPrice.current.placeholder = getNumberWithSpaces(newFilters.price.MAX);
     return newFilters;
-  };
-
-  const onCheckboxClick = (evt) => {
-    if (evt.target.tagName === `INPUT`) {
-      changeParameter(evt.target.dataset.filter, evt.target.dataset[evt.target.dataset.filter], ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
-    }
   };
 
   const PriceActions = {
@@ -458,12 +248,12 @@ function Filter() {
       if (Number(evt.target.value) !== activePrices.MIN) {
         if (Number(evt.target.value) > activePrices.MAX) {
           minPrice.current.value = activePrices.MAX;
-          changeParameter(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: activePrices.MAX}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+          onParameterChange(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: activePrices.MAX}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
         } else if (Number(evt.target.value) < availableFilters.price.MIN) {
           minPrice.current.value = availableFilters.price.MIN;
-          changeParameter(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: availableFilters.price.MIN}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+          onParameterChange(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: availableFilters.price.MIN}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
         } else {
-          changeParameter(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: Number(evt.target.value)}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+          onParameterChange(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: Number(evt.target.value)}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
         }
       }
     },
@@ -471,12 +261,12 @@ function Filter() {
       if (Number(evt.target.value) !== activePrices.MAX) {
         if (Number(evt.target.value) < activePrices.MIN) {
           maxPrice.current.value = activePrices.MIN;
-          changeParameter(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: activePrices.MIN}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+          onParameterChange(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: activePrices.MIN}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
         } else if (Number(evt.target.value) > availableFilters.price.MAX) {
           maxPrice.current.value = availableFilters.price.MAX;
-          changeParameter(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: availableFilters.price.MAX}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+          onParameterChange(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: availableFilters.price.MAX}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
         } else {
-          changeParameter(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: Number(evt.target.value)}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+          onParameterChange(evt.target.dataset.filter, {[evt.target.dataset[evt.target.dataset.filter]]: Number(evt.target.value)}, ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
         }
       }
     }
@@ -489,10 +279,14 @@ function Filter() {
   };
 
   const onCheckboxKeydown = (evt) => {
-    // eslint-disable-next-line
-    debugger;
     if (evt.keyCode === KeyCode.ENTER && evt.target.tagName === `LABEL`) {
-      changeParameter(evt.target.dataset.filter, evt.target.dataset[evt.target.dataset.filter], ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+      onParameterChange(evt.target.dataset.filter, evt.target.dataset[evt.target.dataset.filter], ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
+    }
+  };
+
+  const onCheckboxClick = (evt) => {
+    if (evt.target.tagName === `INPUT`) {
+      onParameterChange(evt.target.dataset.filter, evt.target.dataset[evt.target.dataset.filter], ActiveValues[evt.target.dataset.filter], Setters[evt.target.dataset.filter]);
     }
   };
 
@@ -532,10 +326,9 @@ function Filter() {
   };
 
   useEffect(() => {
-    const filtersInData = getAvailableFilters(guitars);
-    setFilters(Object.freeze(filtersInData));
-    setAvailableFilters(getAvailableFilters(guitars));
-    setActivePrices(getAvailableFilters(guitars).price);
+    setFilters(Object.freeze(getFilters(guitars)));
+    setAvailableFilters(getFilters(guitars));
+    setActivePrices(getFilters(guitars).price);
     dispatch(changeFilteredGuitars(guitars));
   }, [guitars]);
 

@@ -8,8 +8,6 @@ export const getCapitalizedWord = (word) => {
 
 export const sortFunctionToLargest = (parameter) => {
   return function (num1, num2) {
-    // eslint-disable-next-line
-        debugger;
     return num1[parameter] - num2[parameter];
   };
 };

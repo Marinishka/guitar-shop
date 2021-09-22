@@ -35,3 +35,57 @@ export const KeyCode = {
   ESCAPE: 27,
   ENTER: 13
 };
+
+export const FilterModifiers = new Map([
+  [`type`, function (guitar, newFilters) {
+    newFilters.type.add(guitar.type);
+  }],
+  [`strings`, function (guitar, newFilters) {
+    newFilters.strings.add(guitar.strings);
+  }],
+  [`price`, function (guitar, newFilters) {
+    if (newFilters.price.MIN >= guitar.price) {
+      newFilters.price.MIN = guitar.price;
+    }
+    if (newFilters.price.MAX <= guitar.price) {
+      newFilters.price.MAX = guitar.price;
+    }
+  }]
+]);
+
+export const IsGuitarOptionsAvailable = new Map([
+  [`type`, function (guitar, activeValues) {
+    if (activeValues.length > 0) {
+      return activeValues.includes(guitar.type);
+    } else {
+      return true;
+    }
+  }],
+  [`strings`, function (guitar, activeValues) {
+    if (activeValues.length > 0) {
+      return activeValues.includes(String(guitar.strings));
+    } else {
+      return true;
+    }
+  }],
+  [`price`, function (guitar, activeValuesPrices) {
+    return guitar.price >= activeValuesPrices.MIN && guitar.price <= activeValuesPrices.MAX;
+  }]
+]);
+
+export const CheckingEnteredValues = new Map([
+  [`type`, function (checkedValues, availableValues) {
+    checkedValues.forEach((value) => {
+      if (!availableValues.has(value)) {
+        checkedValues.delete(value);
+      }
+    });
+  }],
+  [`strings`, function (checkedValues, availableValues) {
+    checkedValues.forEach((value) => {
+      if (!availableValues.has(Number(value))) {
+        checkedValues.delete(value);
+      }
+    });
+  }]
+]);
