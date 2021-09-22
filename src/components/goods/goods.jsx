@@ -1,27 +1,35 @@
 import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
+import Sort from '../sort/sort';
 import GoodsList from '../goods-list/goods-list';
 import Pagination from '../pagination/pagination';
 import data from '../../data';
 import {ORDERS_IN_LIST} from '../../const';
-import {useDispatch} from 'react-redux';
 import {fetchGuitars} from '../../store/action';
 
 function Goods({setPopupOpen}) {
   const [activePage, setActivePage] = useState(1);
+  const [amountPages, setAmountPages] = useState(0);
+
+  const filteredGuitars = useSelector((state) => state.LOCAL.filteredGuitars);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchGuitars(data));
+    setAmountPages(Math.ceil(data.length / ORDERS_IN_LIST));
   }, []);
 
-  const amountPages = Math.ceil(data.length / ORDERS_IN_LIST);
+  useEffect(() => {
+    setAmountPages(Math.ceil(filteredGuitars.length / ORDERS_IN_LIST));
+  }, [filteredGuitars]);
 
-  return <>
-    <GoodsList activePage={activePage} data={data} setPopupOpen={setPopupOpen}/>
-    <Pagination amountPages={amountPages} activePage={activePage} setActivePage={setActivePage}/>
-  </>;
+  return <div className="catalog__goods">
+    <Sort/>
+    <GoodsList activePage={activePage} setPopupOpen={setPopupOpen}/>
+    {amountPages > 1 ? <Pagination amountPages={amountPages} activePage={activePage} setActivePage={setActivePage}/> : ``}
+  </div>;
 }
 
 Goods.propTypes = {

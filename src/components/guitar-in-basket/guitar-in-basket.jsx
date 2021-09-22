@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import {getCapitalizedWord, getNumberWithSpaces} from '../../utils/common';
 import {addGuitar, deleteOneGuitar} from '../../store/action';
+import {GuitarTypes} from '../../const';
 
 function GuitarInBasket({guitarInBasket, item, setPopupOpen}) {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ function GuitarInBasket({guitarInBasket, item, setPopupOpen}) {
         <img className="basket__img"
           width="60"
           height="124"
-          src="./img/electro-1-mini.png"
+          src={`./img/${GuitarTypes[guitarInBasket.type][0]}-mini.png`}
           alt={`${guitarInBasket.strings} струнная ${guitarInBasket.type} ${guitarInBasket.name}`}></img>
         <div className="basket__specifications">
           <h3 className="basket__title">{getCapitalizedWord(guitarInBasket.type)} {guitarInBasket.name}</h3>

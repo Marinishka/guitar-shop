@@ -12,7 +12,7 @@ function App() {
 
   return (<Router>
     <Header/>
-    <main className="container">
+    <main className="container main">
       <h1 className="visually-hidden">Магазин гитар Guitar shop</h1>
       <Switch>
         <Route path={Routes.CATALOG} exact render={() => {

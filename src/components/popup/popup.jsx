@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import PopupAdd from '../popup-add/popup-add';
 import PopupAdded from '../popup-added/popup-added';
 import PopupDelete from '../popup-delete/popup-delete';
+import {KeyCode} from '../../const';
 
 function Popup({popupOpen, setPopupOpen}) {
 
@@ -40,8 +41,19 @@ function Popup({popupOpen, setPopupOpen}) {
     }
   };
 
+  const onEscPress = (evt) => {
+    if (evt.keyCode === KeyCode.ESCAPE) {
+      closePopup();
+    }
+  };
+
   useEffect(() => {
     document.documentElement.classList.add(`overflow--hidden`);
+    document.addEventListener(`keydown`, onEscPress);
+    return () => {
+      document.removeEventListener(`keydown`, onEscPress);
+      document.body.classList.remove(`overflow--hidden`);
+    };
   }, []);
 
   return <div className="overlay" onClick={onOverlayClick}>

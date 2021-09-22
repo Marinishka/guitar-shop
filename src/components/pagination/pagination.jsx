@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {KeyCode} from '../../const';
 
 function Pagination({activePage, amountPages, setActivePage}) {
 
@@ -27,7 +28,9 @@ function Pagination({activePage, amountPages, setActivePage}) {
         className={`pagination__item ${item === activeP ? `pagination__item--active` : ``}`}
         key={`${item}-${indx}`}
         onClick={onPaginationItemClick}
-        data-value={item}>
+        onKeyDown={onPaginationItemKeydown}
+        data-value={item}
+        tabIndex="0">
         {item}
       </li>;
     });
@@ -35,6 +38,12 @@ function Pagination({activePage, amountPages, setActivePage}) {
 
   const onPaginationItemClick = (evt) => {
     if (evt.target.dataset.value !== `...`) {
+      setActivePage(Number(evt.target.dataset.value));
+    }
+  };
+
+  const onPaginationItemKeydown = (evt) => {
+    if (evt.keyCode === KeyCode.ENTER && evt.target.dataset.value !== `...`) {
       setActivePage(Number(evt.target.dataset.value));
     }
   };
