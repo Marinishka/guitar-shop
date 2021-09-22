@@ -176,12 +176,8 @@ function Filter() {
         modificateAvailableFilters(newActiveValues, null, guitarOptions, newFilters);
         newFilters.price.MIN = filters.price.MIN;
         newFilters.price.MAX = filters.price.MAX;
-      } else if (newActiveValues.type.length > 0 && newActiveValues.strings.length > 0) {
+      } else if (newActiveValues.type.length > 0 || newActiveValues.strings.length > 0) {
         modificateAvailableFilters(newActiveValues, checkedFilter, guitarOptions, newFilters, true);
-      } else if (newActiveValues.strings.length > 0) {
-        modificateAvailableFilters(newActiveValues, checkedFilter, guitarOptions, newFilters, true);
-      } else {
-        modificateAvailableFilters(newActiveValues, `type`, guitarOptions, newFilters, true);
       }
     } else {
       let filtersForModifiredPrice = new Map();
