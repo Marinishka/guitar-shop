@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {KeyCode} from '../../const';
 
-function Pagination({activePage, amountPages, setActivePage}) {
+function Pagination({activePage, amountPages, onSetActivePage}) {
 
   const getPaginationItems = (activeP, orderPages) => {
     let pageNums = [];
@@ -38,22 +38,22 @@ function Pagination({activePage, amountPages, setActivePage}) {
 
   const onPaginationItemClick = (evt) => {
     if (evt.target.dataset.value !== `...`) {
-      setActivePage(Number(evt.target.dataset.value));
+      onSetActivePage(Number(evt.target.dataset.value));
     }
   };
 
   const onPaginationItemKeydown = (evt) => {
     if (evt.keyCode === KeyCode.ENTER && evt.target.dataset.value !== `...`) {
-      setActivePage(Number(evt.target.dataset.value));
+      onSetActivePage(Number(evt.target.dataset.value));
     }
   };
 
   const onBtnNextClick = () => {
-    setActivePage(activePage + 1);
+    onSetActivePage(activePage + 1);
   };
 
   const onBtnPrevClick = () => {
-    setActivePage(activePage - 1);
+    onSetActivePage(activePage - 1);
   };
 
   const getBtnPrev = () => {
@@ -76,7 +76,7 @@ function Pagination({activePage, amountPages, setActivePage}) {
 Pagination.propTypes = {
   activePage: PropTypes.number.isRequired,
   amountPages: PropTypes.number.isRequired,
-  setActivePage: PropTypes.func.isRequired
+  onSetActivePage: PropTypes.func.isRequired
 };
 
 export default Pagination;

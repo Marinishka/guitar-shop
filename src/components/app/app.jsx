@@ -16,15 +16,15 @@ function App() {
       <h1 className="visually-hidden">Магазин гитар Guitar shop</h1>
       <Switch>
         <Route path={Routes.CATALOG} exact render={() => {
-          return <Catalog setPopupOpen={setPopupOpen}/>;
+          return <Catalog onSetPopupOpen={setPopupOpen}/>;
         }}/>
         <Route path={Routes.BASKET} exact render={() => {
-          return <Basket setPopupOpen={setPopupOpen}/>;
+          return <Basket onSetPopupOpen={setPopupOpen}/>;
         }}/>
       </Switch>
     </main>
     <Footer/>
-    {popupOpen ? <Popup popupOpen={popupOpen} setPopupOpen={setPopupOpen}/> : ``}
+    {popupOpen ? <Popup popupOpen={popupOpen} onSetPopupOpen={setPopupOpen}/> : ``}
   </Router>
   );
 }

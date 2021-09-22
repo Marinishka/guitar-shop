@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import GuitarInBasket from '../guitar-in-basket/guitar-in-basket';
-import {getNumberWithSpaces} from '../../utils/common';
+import {numberFormatter} from '../../utils/common';
 import {PromoCodeErrors, PromoCodeValues} from '../../const';
 
-function BasketForm({setPopupOpen}) {
+function BasketForm({onSetPopupOpen}) {
   const guitarsInBasket = useSelector((state) => state.LOCAL.guitarsInBasket);
   const guitars = useSelector((state) => state.DATA.guitars);
   const [promoCode, setPromoCode] = useState(`NOPROMO`);
@@ -15,7 +15,7 @@ function BasketForm({setPopupOpen}) {
   const getGuitarsList = (items) => {
     return items.map((item) => {
       const guitarInBasket = guitars.find((guitar) => guitar.art === item.art);
-      return <GuitarInBasket key={item.art} guitarInBasket={guitarInBasket} item={item} setPopupOpen={setPopupOpen}/>;
+      return <GuitarInBasket key={item.art} guitarInBasket={guitarInBasket} item={item} onSetPopupOpen={onSetPopupOpen}/>;
     });
   };
 
@@ -88,7 +88,7 @@ function BasketForm({setPopupOpen}) {
         <button className="basket__promo-code-btn" type="button" onClick={onPromoCodeBtnClick}>Применить купон</button>
       </div>
       <div className="basket__column basket__column--right">
-        <div className="basket__sum">Всего {getNumberWithSpaces(sumPrice)} &#8381;</div>
+        <div className="basket__sum">Всего {numberFormatter.format(sumPrice)} &#8381;</div>
         <button className="basket__submit" type="submit">Оформить заказ</button>
       </div>
     </div>
@@ -96,7 +96,7 @@ function BasketForm({setPopupOpen}) {
 }
 
 BasketForm.propTypes = {
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default BasketForm;

@@ -5,23 +5,23 @@ import PopupAdded from '../popup-added/popup-added';
 import PopupDelete from '../popup-delete/popup-delete';
 import {KeyCode} from '../../const';
 
-function Popup({popupOpen, setPopupOpen}) {
+function Popup({popupOpen, onSetPopupOpen}) {
 
-  const closePopup = () => {
-    setPopupOpen(null);
+  const onClosePopup = () => {
+    onSetPopupOpen(null);
     document.documentElement.classList.remove(`overflow--hidden`);
   };
 
   const getPopupAdd = (item) => {
-    return <PopupAdd closePopup={closePopup} item={item} setPopupOpen={setPopupOpen}/>;
+    return <PopupAdd item={item} onSetPopupOpen={onSetPopupOpen}/>;
   };
 
   const getPopupAdded = () => {
-    return <PopupAdded closePopup={closePopup}/>;
+    return <PopupAdded onClosePopup={onClosePopup}/>;
   };
 
   const getPopupDelete = (item) => {
-    return <PopupDelete closePopup={closePopup} item={item}/>;
+    return <PopupDelete onClosePopup={onClosePopup} item={item}/>;
   };
 
   const PopupInners = {
@@ -32,18 +32,18 @@ function Popup({popupOpen, setPopupOpen}) {
 
   const onCloseClick = (evt) => {
     evt.preventDefault();
-    closePopup();
+    onClosePopup();
   };
 
   const onOverlayClick = (evt) => {
     if (evt.target.classList.contains(`overlay`)) {
-      closePopup();
+      onClosePopup();
     }
   };
 
   const onEscPress = (evt) => {
     if (evt.keyCode === KeyCode.ESCAPE) {
-      closePopup();
+      onClosePopup();
     }
   };
 
@@ -66,7 +66,7 @@ function Popup({popupOpen, setPopupOpen}) {
 
 Popup.propTypes = {
   popupOpen: PropTypes.array.isRequired,
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default Popup;

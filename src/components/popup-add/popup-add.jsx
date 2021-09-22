@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import {getCapitalizedWord, getNumberWithSpaces} from './../../utils/common';
+import {getCapitalizedWord, numberFormatter} from './../../utils/common';
 import {addGuitar} from '../../store/action';
 import {GuitarTypes} from '../../const';
 
-function PopupAdd({item, setPopupOpen}) {
+function PopupAdd({item, onSetPopupOpen}) {
 
   const dispatch = useDispatch();
 
   const onAddClick = (evt) => {
     evt.preventDefault();
-    setPopupOpen([`added-item`, null]);
+    onSetPopupOpen([`added-item`, null]);
     dispatch(addGuitar(item.art));
   };
 
@@ -27,7 +27,7 @@ function PopupAdd({item, setPopupOpen}) {
         <h3 className="popup__title">{item.name}</h3>
         <div className="popup__characteristic">Артикул: {item.art}</div>
         <div className="popup__characteristic">{getCapitalizedWord(item.type)}, {item.strings} струнная</div>
-        <div className="popup__price">Цена: {getNumberWithSpaces(item.price)} &#8381;</div>
+        <div className="popup__price">Цена: {numberFormatter.format(item.price)} &#8381;</div>
       </div>
       <button className="popup__add" type="button" onClick={onAddClick}>Добавить в корзину</button>
     </section>
@@ -36,7 +36,7 @@ function PopupAdd({item, setPopupOpen}) {
 
 PopupAdd.propTypes = {
   item: PropTypes.object,
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default PopupAdd;

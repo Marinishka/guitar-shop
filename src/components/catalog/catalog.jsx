@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Filter from '../filter/filter';
 import Goods from '../goods/goods';
 
-function Catalog({setPopupOpen}) {
+function Catalog({onSetPopupOpen}) {
   return <>
     <h2 className="catalog__title">Каталог гитар</h2>
     <ul className="bread-crumbs">
@@ -16,13 +16,13 @@ function Catalog({setPopupOpen}) {
     </ul>
     <div className="catalog__main">
       <Filter/>
-      <Goods setPopupOpen={setPopupOpen}/>
+      <Goods onSetPopupOpen={onSetPopupOpen}/>
     </div>
   </>;
 }
 
 Catalog.propTypes = {
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default Catalog;

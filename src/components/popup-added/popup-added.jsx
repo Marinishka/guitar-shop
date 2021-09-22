@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {Routes} from '../../const';
 
-function PopupAdded({closePopup}) {
+function PopupAdded({onClosePopup}) {
   const onLinkCkick = () => {
-    closePopup();
+    onClosePopup();
   };
 
   const onContinueClick = (evt) => {
     evt.preventDefault();
-    closePopup();
+    onClosePopup();
   };
 
   return <div className="popup__inner">
@@ -23,7 +23,7 @@ function PopupAdded({closePopup}) {
 }
 
 PopupAdded.propTypes = {
-  closePopup: PropTypes.func.isRequired
+  onClosePopup: PropTypes.func.isRequired
 };
 
 export default PopupAdded;

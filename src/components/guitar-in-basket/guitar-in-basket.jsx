@@ -1,11 +1,11 @@
 import React, {useRef} from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import {getCapitalizedWord, getNumberWithSpaces} from '../../utils/common';
+import {getCapitalizedWord, numberFormatter} from '../../utils/common';
 import {addGuitar, deleteOneGuitar} from '../../store/action';
 import {GuitarTypes} from '../../const';
 
-function GuitarInBasket({guitarInBasket, item, setPopupOpen}) {
+function GuitarInBasket({guitarInBasket, item, onSetPopupOpen}) {
   const dispatch = useDispatch();
 
   const quantity = useRef(null);
@@ -17,17 +17,22 @@ function GuitarInBasket({guitarInBasket, item, setPopupOpen}) {
 
   const onDecrementClick = (art) => {
     if (item.quantity <= 1) {
-      setPopupOpen([`delete`, guitarInBasket]);
+      onSetPopupOpen([`delete`, guitarInBasket]);
     } else {
       dispatch(deleteOneGuitar(art));
       quantity.current.value = item.quantity - 1;
     }
   };
 
+  const onCloseClick = (evt) => {
+    evt.preventDefault();
+    onSetPopupOpen([`delete`, guitarInBasket]);
+  };
+
   return <li className="basket__item" key={guitarInBasket.art}>
     <section className="basket__section">
       <div className="basket__info">
-        <button className="basket__btn-close"></button>
+        <button className="basket__btn-close" onClick={onCloseClick}></button>
         <img className="basket__img"
           width="60"
           height="124"
@@ -39,7 +44,7 @@ function GuitarInBasket({guitarInBasket, item, setPopupOpen}) {
           <div className="basket__characteristic">{getCapitalizedWord(guitarInBasket.type)}, {guitarInBasket.strings} струнная</div>
         </div>
       </div>
-      <div className="basket__price">{getNumberWithSpaces(guitarInBasket.price)} &#8381;</div>
+      <div className="basket__price">{numberFormatter.format(guitarInBasket.price)} &#8381;</div>
       <div className="basket__btns">
         <button className="basket__btn basket__btn--decrement" type="button" onClick={(evt) => {
           evt.preventDefault();
@@ -51,7 +56,7 @@ function GuitarInBasket({guitarInBasket, item, setPopupOpen}) {
           onIncrementClick(item.art);
         }}>+</button>
       </div>
-      <div className="basket__item-sum">{getNumberWithSpaces(guitarInBasket.price * item.quantity)} &#8381;</div>
+      <div className="basket__item-sum">{numberFormatter.format(guitarInBasket.price * item.quantity)} &#8381;</div>
     </section>
   </li>;
 }
@@ -59,7 +64,7 @@ function GuitarInBasket({guitarInBasket, item, setPopupOpen}) {
 GuitarInBasket.propTypes = {
   guitarInBasket: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default GuitarInBasket;

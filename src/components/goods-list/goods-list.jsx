@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getNumberWithSpaces} from '../../utils/common';
 import {GuitarTypes, ORDERS_IN_LIST} from '../../const';
+import {numberFormatter} from '../../utils/common';
 
-function GoodsList({activePage, setPopupOpen}) {
+function GoodsList({activePage, onSetPopupOpen}) {
   const filteredGuitars = useSelector((state) => state.LOCAL.filteredGuitars);
   const [orderList, setOrderList] = useState([]);
 
@@ -21,7 +21,7 @@ function GoodsList({activePage, setPopupOpen}) {
 
       const onBuyClick = (evt) => {
         evt.preventDefault();
-        setPopupOpen([`add-item`, item]);
+        onSetPopupOpen([`add-item`, item]);
       };
 
       return <li className="goods-list__item" key={item.art}>
@@ -39,7 +39,7 @@ function GoodsList({activePage, setPopupOpen}) {
           </div>
           <div className="good__row">
             <h3 className="good__title">{item.name}</h3>
-            <div className="good__price">{getNumberWithSpaces(item.price)} &#8381;</div>
+            <div className="good__price">{numberFormatter.format(item.price)} &#8381;</div>
           </div>
           <div className="good__row">
             <a className="good__link" href="#">Подробнее</a>
@@ -57,7 +57,7 @@ function GoodsList({activePage, setPopupOpen}) {
 
 GoodsList.propTypes = {
   activePage: PropTypes.number.isRequired,
-  setPopupOpen: PropTypes.func.isRequired
+  onSetPopupOpen: PropTypes.func.isRequired
 };
 
 export default GoodsList;
