@@ -1,4 +1,4 @@
-import {addGuitar, deleteOneGuitar, deleteModelGuitar, changeFilteredGuitars} from '../action';
+import {addOneGuitar, deleteOneGuitar, deleteModelGuitar, changeFilteredGuitars, addGuitars} from '../action';
 import {createReducer} from '@reduxjs/toolkit';
 
 const initialState = {
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const localState = createReducer(initialState, (builder) => {
-  builder.addCase(addGuitar, (state, action) => {
+  builder.addCase(addOneGuitar, (state, action) => {
     if (state.guitarsInBasket.find((item) => item.art === action.payload)) {
       state.guitarsInBasket = state.guitarsInBasket.map((item) => {
         if (item.art === action.payload) {
@@ -18,6 +18,14 @@ const localState = createReducer(initialState, (builder) => {
     } else {
       state.guitarsInBasket.push({art: action.payload, quantity: 1});
     }
+  });
+  builder.addCase(addGuitars, (state, action) => {
+    state.guitarsInBasket = state.guitarsInBasket.map((item) => {
+      if (item.art === action.payload.art) {
+        item.quantity = action.payload.quantity;
+      }
+      return {art: item.art, quantity: item.quantity};
+    });
   });
   builder.addCase(deleteOneGuitar, (state, action) => {
     state.guitarsInBasket = state.guitarsInBasket.map((item) => {
