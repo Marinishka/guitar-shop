@@ -20,7 +20,7 @@ function BasketForm({onSetPopupOpen}) {
   };
 
   const inputPromoCode = (evt) => {
-    setPromoCode(evt.target.value.toUpperCase());
+    setPromoCode(evt.target.value.trim().toUpperCase());
   };
 
   const onPromoCodeBtnClick = () => {

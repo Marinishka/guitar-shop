@@ -27,7 +27,7 @@ function Goods({onSetPopupOpen}) {
 
   return <div className="catalog__goods">
     <Sort/>
-    <GoodsList activePage={activePage} onSetPopupOpen={onSetPopupOpen}/>
+    {filteredGuitars.length > 0 ? <GoodsList activePage={activePage} onSetPopupOpen={onSetPopupOpen}/> : <div className="basket">Нет подходящих гитар. Попробуйте изменить настройки поиска</div>}
     {amountPages > 1 ? <Pagination amountPages={amountPages} activePage={activePage} onSetActivePage={setActivePage}/> : ``}
   </div>;
 }

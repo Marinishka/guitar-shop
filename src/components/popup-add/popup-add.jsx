@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import {getCapitalizedWord, numberFormatter} from './../../utils/common';
-import {addGuitar} from '../../store/action';
+import {addOneGuitar} from '../../store/action';
 import {GuitarTypes} from '../../const';
 
 function PopupAdd({item, onSetPopupOpen}) {
@@ -12,7 +12,7 @@ function PopupAdd({item, onSetPopupOpen}) {
   const onAddClick = (evt) => {
     evt.preventDefault();
     onSetPopupOpen([`added-item`, null]);
-    dispatch(addGuitar(item.art));
+    dispatch(addOneGuitar(item.art));
   };
 
   return <div className="popup__inner">

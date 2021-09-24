@@ -27,8 +27,11 @@
   background-color: transparent;
   position: absolute;
   border: none;
-  right: 23px;
-  top: 23px;
+  right: 22px;
+  top: 22px;
+  width: 15px;
+  height: 15px;
+  padding: 0;
 }
 
 .popup__close::before {
@@ -99,7 +102,10 @@ transform: rotate(135deg);
 }
 
 .popup__title--added {
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
+  font-size: 18px;
+  text-transform: none;
+  margin-bottom: 7px;
 }
 
 .popup__characteristic {

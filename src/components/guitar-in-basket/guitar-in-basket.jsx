@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import {getCapitalizedWord, numberFormatter} from '../../utils/common';
-import {addGuitar, deleteOneGuitar} from '../../store/action';
+import {addGuitars, addOneGuitar, deleteOneGuitar} from '../../store/action';
 import {GuitarTypes} from '../../const';
 
 function GuitarInBasket({guitarInBasket, item, onSetPopupOpen}) {
@@ -11,7 +11,7 @@ function GuitarInBasket({guitarInBasket, item, onSetPopupOpen}) {
   const quantity = useRef(null);
 
   const onIncrementClick = (art) => {
-    dispatch(addGuitar(art));
+    dispatch(addOneGuitar(art));
     quantity.current.value = item.quantity + 1;
   };
 
@@ -21,6 +21,16 @@ function GuitarInBasket({guitarInBasket, item, onSetPopupOpen}) {
     } else {
       dispatch(deleteOneGuitar(art));
       quantity.current.value = item.quantity - 1;
+    }
+  };
+
+  const onQuantityInput = (art, value) => {
+    if (value === 0) {
+      onSetPopupOpen([`delete`, guitarInBasket]);
+      quantity.current.value = item.quantity;
+    } else {
+      dispatch(addGuitars({art, quantity: Number(value)}));
+      quantity.current.value = value;
     }
   };
 
@@ -50,7 +60,10 @@ function GuitarInBasket({guitarInBasket, item, onSetPopupOpen}) {
           evt.preventDefault();
           onDecrementClick(item.art);
         }}>-</button>
-        <input type="number" className="basket__amount" ref={quantity} defaultValue={item.quantity}></input>
+        <input type="number" min="0" className="basket__amount" ref={quantity} defaultValue={Number(item.quantity)} onBlur={(evt) => {
+          evt.preventDefault();
+          onQuantityInput(item.art, Math.abs(evt.target.value));
+        }}></input>
         <button className="basket__btn basket__btn--increment" type="button" onClick={(evt) => {
           evt.preventDefault();
           onIncrementClick(item.art);
