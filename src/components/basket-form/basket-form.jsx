@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import GuitarInBasket from '../guitar-in-basket/guitar-in-basket';
@@ -19,8 +19,11 @@ function BasketForm({onSetPopupOpen}) {
     });
   };
 
+  const inputText = useRef(null);
+
   const inputPromoCode = (evt) => {
     setPromoCode(evt.target.value.trim().toUpperCase());
+    inputText.current.value = evt.target.value.trim().toUpperCase();
   };
 
   const onPromoCodeBtnClick = () => {
@@ -50,6 +53,12 @@ function BasketForm({onSetPopupOpen}) {
     };
   };
 
+  const getSupergitaraPromoCode = (sum) => {
+    return function () {
+      return sum - PromoCodeValues.SUPERGITARA;
+    };
+  };
+
   const getSumWithoutPromoCode = () => {
     let summ = 0;
     guitarsInBasket.forEach((guitarModel) => {
@@ -63,7 +72,8 @@ function BasketForm({onSetPopupOpen}) {
     const PromoCodes = {
       'NOPROMO': sum,
       'GITARAHIT': getGitarahitPromoCode(sum),
-      'GITARA2020': getGitara2020PromoCode(sum)
+      'GITARA2020': getGitara2020PromoCode(sum),
+      'SUPERGITARA': getSupergitaraPromoCode(sum)
     };
     setSumPrice(PromoCodes[code]);
   };
@@ -83,7 +93,7 @@ function BasketForm({onSetPopupOpen}) {
           <dt className="basket__promo-code-title">Промокод на скидку</dt>
           <dd className="basket__promo-code-text">Введите свой промокод, если он у вас есть.</dd>
         </dl>
-        <input className="basket__promo-code-input" type="text" aria-label="Введите промокод" onInput={inputPromoCode}></input>
+        <input className="basket__promo-code-input" ref={inputText} type="text" aria-label="Введите промокод" onBlur={inputPromoCode}></input>
         {errorPromoCode ? <div className="basket__error-promo-code">{PromoCodeErrors[errorPromoCode]}</div> : ``}
         <button className="basket__promo-code-btn" type="button" onClick={onPromoCodeBtnClick}>Применить купон</button>
       </div>
